@@ -1,25 +1,59 @@
-<h1>Listing ideas</h1>
+<%= render 'pages/home' if !user_signed_in? %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<% if user_signed_in? %>
+    <div class="center">
+      <br>
+      <h1>Ideias recentes</h1>
+      <br>
+    </div>  
 
-  <tbody>
-    <% @ideas.each do |idea| %>
-      <tr>
-        <td><%= idea.title %></td>
-        <td><%= link_to 'Show', idea %></td>
-        <td><%= link_to 'Edit', edit_idea_path(idea) %></td>
-        <td><%= link_to 'Destroy', idea, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
-<br>
+    <div id="ideas" class="transitions-enabled">
+      <% @ideas.each do |idea| %>
 
-<%= link_to 'New Idea', new_idea_path %>
+            <div id="index-wrapper" class="box panel panel-default">
+              <div id="show-user-index" align="center" class="panel-title">
+                  <div style="width: 100%; display: table;">  
+                    <div style="display: table-row">
+                      <div id="index-user-name" align="left" style="display: table-cell;"> 
+                        <span id="user-gliph-footer" class="glyphicon glyphicon-user"></span>
+                          <%= link_to idea.user.full_name %>
+                      </div>
+                      <div id="index-post-time" align="right" style="display: table-cell;">
+                        <span class="glyphicon glyphicon-time"></span>
+                        <%= time_ago_in_words(idea.created_at) %>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+
+              <div id="header-line-div">
+                  <hr id="header-line">
+              </div>
+
+              <div id="index-idea-img">
+                <%= link_to image_tag(idea.image.url(:medium)), idea %>
+              </div>
+
+              <div id="header-line-div">
+                  <hr id="header-line">
+              </div>
+
+              <div id="idea-wrapper" class="panel-body">
+                <h3 id="idea-title"><%= link_to idea.title, idea %></h3>
+              </div>
+
+              <div class="panel-footer" style="width: 100%; display: table;" id="idea-time-set" >
+                  <div id="index-footer" style="display: table-row">
+                    <div align="right" style="display: table-cell;">
+                      <span id="glyph-calendar-index" class="glyphicon glyphicon-calendar"></span> 
+                    </div>
+                    <div align="center" style="display: table-cell;">
+                      <p><%= idea.event_time.try(:strftime, '%d/%m/%Y, às %H:%Mh') %></p>
+                    </div>
+                  </div>
+              </div>
+            </div>
+      <% end %>
+    </div>
+<% end %>
